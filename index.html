@@ -7,38 +7,50 @@
     <title>Marvel Ginting | Software Engineering</title>
 
     <link rel="stylesheet" href="style.css">
-
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
-
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
+        /* --- MODERN CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00ff88, #00aa55);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff88;
+            box-shadow: 0 0 15px #00ff88;
+        }
+
         /* --- STYLE TAMBAHAN UNTUK TOMBOL DAN MODAL MOTTO --- */
         .motto-btn {
             background: transparent;
             border: 2px solid #00ff88;
             color: #00ff88;
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-family: 'Orbitron', sans-serif;
             font-size: 14px;
             font-weight: bold;
             letter-spacing: 2px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
             margin: 15px 0;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
         }
 
         .motto-btn:hover {
             background: #00ff88;
             color: #000;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
+            transform: scale(1.05) translateY(-3px);
         }
 
         .modal-overlay {
@@ -47,8 +59,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4); /* Diturunkan agar filter blur di bawah lebih dominan */
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -58,17 +71,18 @@
             transition: opacity 0.4s ease;
         }
 
+        /* MODERN GLASSMORPHISM DESIGN */
         .modal-content {
-            background: rgba(20, 20, 20, 0.9);
-            border: 2px solid #00ff88;
-            border-radius: 15px;
-            padding: 30px;
+            background: rgba(15, 15, 15, 0.75);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 35px;
             width: 90%;
             max-width: 450px;
             text-align: center;
             position: relative;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-            transform: scale(0.7) rotate(-5deg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 136, 0.15);
+            transform: scale(0.8) translateY(30px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -78,7 +92,7 @@
         }
 
         .modal-overlay.active .modal-content {
-            transform: scale(1) rotate(0deg);
+            transform: scale(1) translateY(0);
         }
 
         .close-btn {
@@ -86,13 +100,14 @@
             top: 15px;
             right: 20px;
             font-size: 28px;
-            color: #fff;
+            color: rgba(255, 255, 255, 0.6);
             cursor: pointer;
-            transition: color 0.2s;
+            transition: all 0.2s ease;
         }
 
         .close-btn:hover {
             color: #ff0055;
+            transform: scale(1.1);
         }
 
         .modal-body h2 {
@@ -107,7 +122,7 @@
             border: none;
             height: 1px;
             background: linear-gradient(90deg, transparent, #00ff88, transparent);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .motto-text {
@@ -116,6 +131,18 @@
             font-size: 16px;
             line-height: 1.6;
             font-style: italic;
+        }
+
+        /* TYPING CURSOR EFFECT */
+        #typing::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+            color: #00ff88;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
     </style>
 </head>
@@ -137,7 +164,7 @@
     </div>
 
     <section class="hero">
-        <div class="card" data-tilt data-tilt-max="25">
+        <div class="card" data-tilt data-tilt-max="15" data-tilt-glare data-tilt-max-glare="0.2">
             <img src="VEL1.PNG" alt="Foto Marvel">
             <h1>MARVEL GINTING</h1>
             <h2 id="typing"></h2>
@@ -282,48 +309,86 @@
             }
         });
 
-        AOS.init();
+        AOS.init({
+            duration: 800,
+            once: true
+        });
 
-        setTimeout(() => {
+        // Loader fadeout yang lebih halus
+        window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            if(loader) loader.style.display = 'none';
-        }, 1500);
+            if(loader) {
+                loader.style.transition = 'opacity 0.5s ease';
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }
+        });
 
+        // Typing Effect yang diperbaiki agar sinkron dengan CSS kursor
         const words = ["PROGRAMMER", "EDITOR", "WEB DEVELOPER"];
         let i = 0, j = 0;
+        let isDeleting = false;
 
         function type() {
             let el = document.getElementById('typing');
             if(!el) return;
-            if (j < words[i].length) {
-                el.innerHTML += words[i][j];
-                j++;
-                setTimeout(type, 100);
+            
+            let currentWord = words[i];
+            
+            if (isDeleting) {
+                el.innerHTML = currentWord.substring(0, j - 1);
+                j--;
             } else {
-                setTimeout(() => {
-                    el.innerHTML = '';
-                    j = 0;
-                    i = (i + 1) % words.length;
-                    type();
-                }, 1500);
+                el.innerHTML = currentWord.substring(0, j + 1);
+                j++;
             }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && j === currentWord.length) {
+                typeSpeed = 2000; // Berhenti sebentar di akhir kata
+                isDeleting = true;
+            } else if (isDeleting && j === 0) {
+                isDeleting = false;
+                i = (i + 1) % words.length;
+                typeSpeed = 500; // Jeda sebelum mengetik kata baru
+            }
+
+            setTimeout(type, typeSpeed);
         }
         type();
 
+        // Inisialisasi tsParticles versi modern & stabil
         tsParticles.load("particles-js", {
             particles: {
-                number: { value: 60 },
+                number: { value: 50 },
                 color: { value: "#00ff88" },
                 shape: { type: "circle" },
-                opacity: { value: 0.4, random: true },
-                size: { value: 3, random: true },
-                move: { enable: true, speed: 1, direction: "bottom", straight: false, outModes: { default: "out" } },
+                opacity: { 
+                    value: { min: 0.1, max: 0.5 },
+                    animation: { enable: true, speed: 1, sync: false }
+                },
+                size: { value: { min: 1, max: 3 } },
+                move: { 
+                    enable: true, 
+                    speed: 0.8, 
+                    direction: "bottom", 
+                    straight: false, 
+                    outModes: { default: "out" } 
+                },
                 links: { enable: false }
-            },
-            interactivity: { events: { onHover: { enable: false } } }
+            }
         });
 
-        // KODE LOGIK JAVASCRIPT UNTUK MODAL MOTTO
+        // Tambahan efek kilau (glare) bawaan vanilla-tilt pada kartu utama
+        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.15,
+        });
+
+        // LOGIK MODAL
         const openModalBtn = document.getElementById('open-motto');
         const closeModalBtn = document.getElementById('close-motto');
         const modalOverlay = document.getElementById('motto-modal');
