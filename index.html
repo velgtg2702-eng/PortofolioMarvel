@@ -1,417 +1,352 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Marvel Ginting | Software Engineering</title>
+    <title>Marvel Ginting | Software Engineering</title>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 
-    <style>
-        /* --- MODERN CUSTOM SCROLLBAR --- */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #00ff88, #00aa55);
-            border-radius: 5px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00ff88;
-            box-shadow: 0 0 15px #00ff88;
-        }
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
 
-        /* --- STYLE TAMBAHAN UNTUK TOMBOL DAN MODAL MOTTO --- */
-        .motto-btn {
-            background: transparent;
-            border: 2px solid #00ff88;
-            color: #00ff88;
-            padding: 12px 24px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            cursor: pointer;
-            border-radius: 8px;
-            margin: 15px 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
-        }
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 
-        .motto-btn:hover {
-            background: #00ff88;
-            color: #000;
-            box-shadow: 0 0 25px rgba(0, 255, 136, 0.8);
-            transform: scale(1.05) translateY(-3px);
-        }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* Diturunkan agar filter blur di bawah lebih dominan */
-            backdrop-filter: blur(12px) saturate(180%);
-            -webkit-backdrop-filter: blur(12px) saturate(180%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-        /* MODERN GLASSMORPHISM DESIGN */
-        .modal-content {
-            background: rgba(15, 15, 15, 0.75);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 20px;
-            padding: 35px;
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 136, 0.15);
-            transform: scale(0.8) translateY(30px);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+    <style>
+        /* --- STYLE TAMBAHAN UNTUK TOMBOL DAN MODAL MOTTO --- */
+        .motto-btn {
+            background: transparent;
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 10px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 15px 0;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+        }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .motto-btn:hover {
+            background: #00ff88;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+            transform: scale(1.05);
+        }
 
-        .modal-overlay.active .modal-content {
-            transform: scale(1) translateY(0);
-        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
 
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            color: rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+        .modal-content {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            transform: scale(0.7) rotate(-5deg);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-        .close-btn:hover {
-            color: #ff0055;
-            transform: scale(1.1);
-        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-        .modal-body h2 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00ff88;
-            font-size: 22px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1) rotate(0deg);
+        }
 
-        .modal-line {
-            border: none;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #00ff88, transparent);
-            margin-bottom: 25px;
-        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
 
-        .motto-text {
-            font-family: sans-serif;
-            color: #e0e0e0;
-            font-size: 16px;
-            line-height: 1.6;
-            font-style: italic;
-        }
+        .close-btn:hover {
+            color: #ff0055;
+        }
 
-        /* TYPING CURSOR EFFECT */
-        #typing::after {
-            content: '|';
-            animation: blink 0.7s infinite;
-            color: #00ff88;
-            margin-left: 4px;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-    </style>
+        .modal-body h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ff88;
+            font-size: 22px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .modal-line {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            margin-bottom: 20px;
+        }
+
+        .motto-text {
+            font-family: sans-serif;
+            color: #e0e0e0;
+            font-size: 16px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div id="loader">
-        <h1>LOADING DULUU GESS</h1>
-        <div class="loading"></div>
-    </div>
+    <div id="loader">
+        <h1>LOADING DULUU GESS</h1>
+        <div class="loading"></div>
+    </div>
 
-    <div id="particles-js"></div>
+    <div id="particles-js"></div>
 
-    <div id="sticky-header-nav" class="sticky-name">
-        <div class="nav-container">
-            <img src="VEL1.PNG" alt="Mini Foto Marvel" class="nav-avatar">
-            <span>MARVEL GINTING</span>
-        </div>
-    </div>
+    <div id="sticky-header-nav" class="sticky-name">
+        <div class="nav-container">
+            <img src="VEL1.PNG" alt="Mini Foto Marvel" class="nav-avatar">
+            <span>MARVEL GINTING</span>
+        </div>
+    </div>
 
-    <section class="hero">
-        <div class="card" data-tilt data-tilt-max="15" data-tilt-glare data-tilt-max-glare="0.2">
-            <img src="VEL1.PNG" alt="Foto Marvel">
-            <h1>MARVEL GINTING</h1>
-            <h2 id="typing"></h2>
-            <p>
-                Programmer, Editor, dan Web Developer yang menyukai teknologi futuristik dan pengembangan aplikasi.
-            </p>
+    <section class="hero">
+        <div class="card" data-tilt data-tilt-max="25">
+            <img src="VEL1.PNG" alt="Foto Marvel">
+            <h1>MARVEL GINTING</h1>
+            <h2 id="typing"></h2>
+            <p>
+                Programmer, Editor, dan Web Developer yang menyukai teknologi futuristik dan pengembangan aplikasi.
+            </p>
 
-            <button id="open-motto" class="motto-btn">LIHAT MOTTO</button>
+            <button id="open-motto" class="motto-btn">LIHAT MOTTO</button>
 
-            <div id="scroll-indicator" class="scroll-down-card">
-                <span>SCROLL DOWN</span>
-                <div class="arrow"></div>
-            </div>
+            <div id="scroll-indicator" class="scroll-down-card">
+                <span>SCROLL DOWN</span>
+                <div class="arrow"></div>
+            </div>
 
-            <div class="social">
-                <a href="https://instagram.com/vell.g4" target="_blank">Instagram</a>
-                <a href="https://wa.me/6289603844755" target="_blank">WhatsApp</a>
-            </div>
-        </div>
-    </section>
+            <div class="social">
+                <a href="https://instagram.com/vell.g4" target="_blank">Instagram</a>
+                <a href="https://wa.me/6289603844755" target="_blank">WhatsApp</a>
+            </div>
+        </div>
+    </section>
 
-    <section class="about" data-aos="fade-up">
-        <h1>TENTANG SAYA</h1>
-        <p>
-            Halo, Saya Marvel Ginting! 👋 Saya adalah seorang pelajar yang percaya bahwa masa muda harus diisi dengan banyak cerita dan pertemanan. Saya orang yang sangat senang bergaul, bersosialisasi, dan bertemu dengan orang-orang baru.<br><br>
-            Selain fokus dengan dunia pendidikan, saya dikenal sebagai orang yang spontan dan suka melakukan hal-hal random yang menghibur orang-orang di sekitar saya. Bagi saya, membawa tawa dan energi positif ke dalam lingkaran pertemanan adalah sebuah pencapaian tersendiri.
-        </p>
-    </section>
+    <section class="about" data-aos="fade-up">
+        <h1>TENTANG SAYA</h1>
+        <p>
+            Halo, Saya Marvel Ginting! 👋 Saya adalah seorang pelajar yang percaya bahwa masa muda harus diisi dengan banyak cerita dan pertemanan. Saya orang yang sangat senang bergaul, bersosialisasi, dan bertemu dengan orang-orang baru.<br><br>
+            Selain fokus dengan dunia pendidikan, saya dikenal sebagai orang yang spontan dan suka melakukan hal-hal random yang menghibur orang-orang di sekitar saya. Bagi saya, membawa tawa dan energi positif ke dalam lingkaran pertemanan adalah sebuah pencapaian tersendiri.
+        </p>
+    </section>
 
-    <section class="skill" data-aos="zoom-in">
-        <h1>SKILL</h1>
-        <div class="bar">
-            HTML
-            <div class="fill html"></div>
-        </div>
-        <div class="bar">
-            Editing
-            <div class="fill edit"></div>
-        </div>
-        <div class="bar">
-            PBO
-            <div class="fill pbo"></div>
-        </div>
-    </section>
+    <section class="skill" data-aos="zoom-in">
+        <h1>SKILL</h1>
+        <div class="bar">
+            HTML
+            <div class="fill html"></div>
+        </div>
+        <div class="bar">
+            Editing
+            <div class="fill edit"></div>
+        </div>
+        <div class="bar">
+            PBO
+            <div class="fill pbo"></div>
+        </div>
+    </section>
 
-    <section class="hobby" data-aos="fade-up">
-        <h1 class="title">HOBI SAYA</h1>
-        <div class="hobby-container">
-            <div class="hobby-card" data-tilt>
-                <div class="icon">🎬</div>
-                <h2>Editing</h2>
-                <p>Menyukai editing foto, video, dan desain kreatif.</p>
-            </div>
-            <div class="hobby-card" data-tilt>
-                <div class="icon">🎵</div>
-                <h2>Mendengarkan Musik</h2>
-                <p>Musik menjadi inspirasi dan entertainment dalam aktivitas sehari-hari.</p>
-            </div>
-            <div class="hobby-card" data-tilt>
-                <div class="icon">🏋️</div>
-                <h2>Berolahraga</h2>
-                <p>Menjaga kesehatan dan meningkatkan semangat belajar.</p>
-            </div>
-        </div>
-    </section>
+    <section class="hobby" data-aos="fade-up">
+        <h1 class="title">HOBI SAYA</h1>
+        <div class="hobby-container">
+            <div class="hobby-card" data-tilt>
+                <div class="icon">🎬</div>
+                <h2>Editing</h2>
+                <p>Menyukai editing foto, video, dan desain kreatif.</p>
+            </div>
+            <div class="hobby-card" data-tilt>
+                <div class="icon">🎵</div>
+                <h2>Mendengarkan Musik</h2>
+                <p>Musik menjadi inspirasi dan entertainment dalam aktivitas sehari-hari.</p>
+            </div>
+            <div class="hobby-card" data-tilt>
+                <div class="icon">🏋️</div>
+                <h2>Berolahraga</h2>
+                <p>Menjaga kesehatan dan meningkatkan semangat belajar.</p>
+            </div>
+        </div>
+    </section>
 
-    <section class="education" data-aos="fade-up">
-        <h1 class="title">RIWAYAT PENDIDIKAN</h1>
-        <div class="edu-container">
-            <div class="edu-card" data-tilt>
-                <img src="sd.jpg" class="logo" alt="Logo SD">
-                <h2>SD YP HKBP 4</h2>
-                <span>2016 - 2022</span>
-                <p>Pendidikan Dasar</p>
-            </div>
-            <div class="edu-card" data-tilt>
-                <img src="smp.jpg" class="logo" alt="Logo SMP">
-                <h2>SMP Negeri 3</h2>
-                <span>2022 - 2025</span>
-                <p>Pendidikan Menengah</p>
-            </div>
-            <div class="edu-card" data-tilt>
-                <img src="smk.jpeg" class="logo" alt="Logo SMK">
-                <h2>SMK Bintang Timur</h2>
-                <span>2025 - Sekarang</span>
-                <p>Jurusan RPL</p>
-            </div>
-        </div>
-    </section>
+    <section class="education" data-aos="fade-up">
+        <h1 class="title">RIWAYAT PENDIDIKAN</h1>
+        <div class="edu-container">
+            <div class="edu-card" data-tilt>
+                <img src="sd.jpg" class="logo" alt="Logo SD">
+                <h2>SD YP HKBP 4</h2>
+                <span>2016 - 2022</span>
+                <p>Pendidikan Dasar</p>
+            </div>
+            <div class="edu-card" data-tilt>
+                <img src="smp.jpg" class="logo" alt="Logo SMP">
+                <h2>SMP Negeri 3</h2>
+                <span>2022 - 2025</span>
+                <p>Pendidikan Menengah</p>
+            </div>
+            <div class="edu-card" data-tilt>
+                <img src="smk.jpeg" class="logo" alt="Logo SMK">
+                <h2>SMK Bintang Timur</h2>
+                <span>2025 - Sekarang</span>
+                <p>Jurusan RPL</p>
+            </div>
+        </div>
+    </section>
 
-    <section class="gallery" data-aos="fade-up">
-        <h1 class="title">GALERI SAYA</h1>
-        <div class="gallery-container">
-            <div class="gallery-item" data-tilt><img src="VEL1.PNG" alt="Gallery 1"></div>
-            <div class="gallery-item" data-tilt><img src="VELL2.JPEG" alt="Gallery 2"></div>
-            <div class="gallery-item" data-tilt><img src="VELLL3.jpeg" alt="Gallery 3"></div>
-            <div class="gallery-item" data-tilt><img src="VELLLL4.jpeg" alt="Gallery 4"></div>
-        </div>
-    </section>
+    <section class="gallery" data-aos="fade-up">
+        <h1 class="title">GALERI SAYA</h1>
+        <div class="gallery-container">
+            <div class="gallery-item" data-tilt><img src="VEL1.PNG" alt="Gallery 1"></div>
+            <div class="gallery-item" data-tilt><img src="VELL2.JPEG" alt="Gallery 2"></div>
+            <div class="gallery-item" data-tilt><img src="VELLL3.jpeg" alt="Gallery 3"></div>
+            <div class="gallery-item" data-tilt><img src="VELLLL4.jpeg" alt="Gallery 4"></div>
+        </div>
+    </section>
 
-    <footer class="footer" data-aos="fade-up">
-        <div class="footer-content">
-            <h2>✨ TERIMA KASIH ✨</h2>
-            <p>Terima kasih telah meluangkan waktu untuk mengenal dan mencari tahu tentang saya.</p>
-            <p><b>~ Marvel Ginting ~</b></p>
-            <div class="footer-social">
-                <a href="https://instagram.com/vell.g4" target="_blank">Instagram</a>
-                <a href="https://wa.me/6289603844755" target="_blank">WhatsApp</a>
-            </div>
-            <div class="copyright">
-                © 2026 Marvel Ginting | Software Engineering
-            </div>
-        </div>
-    </footer>
+    <footer class="footer" data-aos="fade-up">
+        <div class="footer-content">
+            <h2>✨ TERIMA KASIH ✨</h2>
+            <p>Terima kasih telah meluangkan waktu untuk mengenal dan mencari tahu tentang saya.</p>
+            <p><b>~ Marvel Ginting ~</b></p>
+            <div class="footer-social">
+                <a href="https://instagram.com/vell.g4" target="_blank">Instagram</a>
+                <a href="https://wa.me/6289603844755" target="_blank">WhatsApp</a>
+            </div>
+            <div class="copyright">
+                © 2026 Marvel Ginting | Software Engineering
+            </div>
+        </div>
+    </footer>
 
-    <div id="motto-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span id="close-motto" class="close-btn">&times;</span>
-            <div class="modal-body">
-                <h2>✨ MOTTO HIDUP ✨</h2>
-                <hr class="modal-line">
-                <p class="motto-text">
-                    "Hidup itu seperti coding: butuh logika yang tepat, kesabaran tanpa batas, dan keberanian untuk terus mencoba hal baru."
-                </p>
-            </div>
-        </div>
-    </div>
+    <div id="motto-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span id="close-motto" class="close-btn">&times;</span>
+            <div class="modal-body">
+                <h2>✨ MOTTO HIDUP ✨</h2>
+                <hr class="modal-line">
+                <p class="motto-text">
+                    "Hidup itu seperti coding: butuh logika yang tepat, kesabaran tanpa batas, dan keberanian untuk terus mencoba hal baru."
+                </p>
+            </div>
+        </div>
+    </div>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script>
-        window.addEventListener('scroll', function() {
-            const scrollIndicator = document.getElementById('scroll-indicator');
-            const stickyHeaderNav = document.getElementById('sticky-header-nav');
-            let posisiScroll = window.scrollY || document.documentElement.scrollTop;
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        window.addEventListener('scroll', function() {
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            const stickyHeaderNav = document.getElementById('sticky-header-nav');
+            let posisiScroll = window.scrollY || document.documentElement.scrollTop;
 
-            if (posisiScroll > 60) {
-                if(scrollIndicator) scrollIndicator.classList.add('hide');
-                if(stickyHeaderNav) stickyHeaderNav.classList.add('show');
-            } else {
-                if(scrollIndicator) scrollIndicator.classList.remove('hide');
-                if(stickyHeaderNav) stickyHeaderNav.classList.remove('show');
-            }
-        });
+            if (posisiScroll > 60) {
+                if(scrollIndicator) scrollIndicator.classList.add('hide');
+                if(stickyHeaderNav) stickyHeaderNav.classList.add('show');
+            } else {
+                if(scrollIndicator) scrollIndicator.classList.remove('hide');
+                if(stickyHeaderNav) stickyHeaderNav.classList.remove('show');
+            }
+        });
 
-        AOS.init({
-            duration: 800,
-            once: true
-        });
+        AOS.init();
 
-        // Loader fadeout yang lebih halus
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            if(loader) {
-                loader.style.transition = 'opacity 0.5s ease';
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 500);
-            }
-        });
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if(loader) loader.style.display = 'none';
+        }, 1500);
 
-        // Typing Effect yang diperbaiki agar sinkron dengan CSS kursor
-        const words = ["PROGRAMMER", "EDITOR", "WEB DEVELOPER"];
-        let i = 0, j = 0;
-        let isDeleting = false;
+        const words = ["PROGRAMMER", "EDITOR", "WEB DEVELOPER"];
+        let i = 0, j = 0;
 
-        function type() {
-            let el = document.getElementById('typing');
-            if(!el) return;
-            
-            let currentWord = words[i];
-            
-            if (isDeleting) {
-                el.innerHTML = currentWord.substring(0, j - 1);
-                j--;
-            } else {
-                el.innerHTML = currentWord.substring(0, j + 1);
-                j++;
-            }
+        function type() {
+            let el = document.getElementById('typing');
+            if(!el) return;
+            if (j < words[i].length) {
+                el.innerHTML += words[i][j];
+                j++;
+                setTimeout(type, 100);
+            } else {
+                setTimeout(() => {
+                    el.innerHTML = '';
+                    j = 0;
+                    i = (i + 1) % words.length;
+                    type();
+                }, 1500);
+            }
+        }
+        type();
 
-            let typeSpeed = isDeleting ? 50 : 100;
+        tsParticles.load("particles-js", {
+            particles: {
+                number: { value: 60 },
+                color: { value: "#00ff88" },
+                shape: { type: "circle" },
+                opacity: { value: 0.4, random: true },
+                size: { value: 3, random: true },
+                move: { enable: true, speed: 1, direction: "bottom", straight: false, outModes: { default: "out" } },
+                links: { enable: false }
+            },
+            interactivity: { events: { onHover: { enable: false } } }
+        });
 
-            if (!isDeleting && j === currentWord.length) {
-                typeSpeed = 2000; // Berhenti sebentar di akhir kata
-                isDeleting = true;
-            } else if (isDeleting && j === 0) {
-                isDeleting = false;
-                i = (i + 1) % words.length;
-                typeSpeed = 500; // Jeda sebelum mengetik kata baru
-            }
+        // KODE LOGIK JAVASCRIPT UNTUK MODAL MOTTO
+        const openModalBtn = document.getElementById('open-motto');
+        const closeModalBtn = document.getElementById('close-motto');
+        const modalOverlay = document.getElementById('motto-modal');
 
-            setTimeout(type, typeSpeed);
-        }
-        type();
+        if (openModalBtn && modalOverlay) {
+            openModalBtn.addEventListener('click', () => {
+                modalOverlay.classList.add('active');
+            });
+        }
 
-        // Inisialisasi tsParticles versi modern & stabil
-        tsParticles.load("particles-js", {
-            particles: {
-                number: { value: 50 },
-                color: { value: "#00ff88" },
-                shape: { type: "circle" },
-                opacity: { 
-                    value: { min: 0.1, max: 0.5 },
-                    animation: { enable: true, speed: 1, sync: false }
-                },
-                size: { value: { min: 1, max: 3 } },
-                move: { 
-                    enable: true, 
-                    speed: 0.8, 
-                    direction: "bottom", 
-                    straight: false, 
-                    outModes: { default: "out" } 
-                },
-                links: { enable: false }
-            }
-        });
+        if (closeModalBtn && modalOverlay) {
+            closeModalBtn.addEventListener('click', () => {
+                modalOverlay.classList.remove('active');
+            });
+        }
 
-        // Tambahan efek kilau (glare) bawaan vanilla-tilt pada kartu utama
-        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-            max: 15,
-            speed: 400,
-            glare: true,
-            "max-glare": 0.15,
-        });
-
-        // LOGIK MODAL
-        const openModalBtn = document.getElementById('open-motto');
-        const closeModalBtn = document.getElementById('close-motto');
-        const modalOverlay = document.getElementById('motto-modal');
-
-        if (openModalBtn && modalOverlay) {
-            openModalBtn.addEventListener('click', () => {
-                modalOverlay.classList.add('active');
-            });
-        }
-
-        if (closeModalBtn && modalOverlay) {
-            closeModalBtn.addEventListener('click', () => {
-                modalOverlay.classList.remove('active');
-            });
-        }
-
-        if (modalOverlay) {
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) {
-                    modalOverlay.classList.remove('active');
-                }
-            });
-        }
-    </script>
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('active');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
